@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+
+const primaryColor = Colors.blue;
+const background = Color(0xFFF0F0F0);
+const backgroundDark = Color(0xFFF2F0F0);
+const textColorDark = Color(0xFF344D67);
+const textColorLight = Color(0xFF6B728E);
+const dividerColor = Color.fromARGB(255, 228, 223, 223);
+const hintColor = Colors.grey;
+const textFieldFillColor = Color(0xFFF5F5F5);
+
+
+const acceptedColor = Colors.green;
+const rejectedColor = Colors.red;
+const pendingColor = Colors.amber;
+
+Map<int, Color> color = const {
+  50: Color.fromRGBO(1, 52, 135, .1),
+  100: Color.fromRGBO(1, 52, 135, .2),
+  200: Color.fromRGBO(1, 52, 135, .3),
+  300: Color.fromRGBO(1, 52, 135, .4),
+  400: Color.fromRGBO(1, 52, 135, .5),
+  500: Color.fromRGBO(1, 52, 135, .6),
+  600: Color.fromRGBO(1, 52, 135, .7),
+  700: Color.fromRGBO(1, 52, 135, .8),
+  800: Color.fromRGBO(1, 52, 135, .9),
+  900: Color.fromRGBO(1, 52, 135, 1),
+};
+
+MaterialColor primarySwatch = MaterialColor(0xFF013487, color);
+
+extension HexColor on Color {
+  /// String is in the format "aabbcc" or "ffaabbcc" with an optional leading "#".
+  static Color fromHex(String hexString) {
+    final buffer = StringBuffer();
+    if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+    buffer.write(hexString.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
+  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+      '${alpha.toRadixString(16).padLeft(2, '0')}'
+      '${red.toRadixString(16).padLeft(2, '0')}'
+      '${green.toRadixString(16).padLeft(2, '0')}'
+      '${blue.toRadixString(16).padLeft(2, '0')}';
+}
+
+Color getColorByStatus(String status) {
+  switch (status) {
+    case 'CREATED':
+    case 'ALLOCATED':
+      return const Color.fromARGB(255, 0, 75, 3);
+    case 'PENDING':
+      return pendingColor;
+    case 'APPROVED':
+    case 'ACTIVE':
+      return acceptedColor;
+    case 'DECLINED':
+    case 'SUSPENDED':
+    case 'BLOCKED':
+      return rejectedColor;
+    default:
+      return textColorDark;
+  }
+}
