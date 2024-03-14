@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:story_teller_admin/screen/homeContainer/home_container.dart';
 import 'package:story_teller_admin/screen/login/login_screen.dart';
 
 import 'service/api_provider.dart';
+import 'util/router.dart';
 
 late SharedPreferences prefs;
+final navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   prefs = await SharedPreferences.getInstance();
@@ -29,7 +33,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: false,
         ),
-        home: const LoginScreen(),
+        home: const HomeContainer(),
+        navigatorKey: navigatorKey,
+        onGenerateRoute: NavRoute.generatedRoute,
       ),
     );
   }

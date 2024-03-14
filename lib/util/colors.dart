@@ -8,7 +8,7 @@ const textColorLight = Color(0xFF6B728E);
 const dividerColor = Color.fromARGB(255, 228, 223, 223);
 const hintColor = Colors.grey;
 const textFieldFillColor = Color(0xFFF5F5F5);
-
+const secondaryColor = Colors.indigo;
 
 const acceptedColor = Colors.green;
 const rejectedColor = Colors.red;

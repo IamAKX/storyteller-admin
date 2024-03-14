@@ -4,6 +4,7 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:provider/provider.dart';
+import 'package:story_teller_admin/screen/homeContainer/home_container.dart';
 
 import '../../service/api_provider.dart';
 import '../../util/colors.dart';
@@ -148,7 +149,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: defaultPadding * 2),
                       child: PrimaryButtonDark(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(HomeContainer.routePath);
+                          },
                           label: 'Login',
                           isDisabled: false,
                           isLoading: false),
