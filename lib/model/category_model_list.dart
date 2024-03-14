@@ -22,7 +22,7 @@ class CategoryModelList {
     final result = <String, dynamic>{};
 
     if (data != null) {
-      result.addAll({'data': data!.map((x) => x?.toMap()).toList()});
+      result.addAll({'data': data!.map((x) => x.toMap()).toList()});
     }
 
     return result;

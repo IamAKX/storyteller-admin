@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +7,6 @@ import 'package:story_teller_admin/screen/category/category_popups.dart';
 import 'package:story_teller_admin/util/colors.dart';
 import 'package:story_teller_admin/util/timestamp_formatter.dart';
 import 'package:story_teller_admin/widget/input_field_round.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import '../../service/api_provider.dart';
 import '../../util/theme.dart';

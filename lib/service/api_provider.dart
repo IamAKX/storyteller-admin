@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:story_teller_admin/model/category_model.dart';
 import 'package:story_teller_admin/model/category_model_list.dart';
 
 import '../util/api.dart';
