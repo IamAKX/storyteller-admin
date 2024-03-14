@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:story_teller_admin/screen/category/category.dart';
+import 'package:story_teller_admin/widget/mobile_view.dart';
 
 import '../../widget/responsive.dart';
 import 'side_menu.dart';
@@ -42,24 +43,32 @@ class _HomeContainerState extends State<HomeContainer> {
         },
       ),
       body: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (Responsive.isDesktop(context))
-              Expanded(
-                child: SideMenu(
-                  navigateMenu: (int index) {
-                    navigateMenu(index);
-                  },
-                ),
-              ),
-            Expanded(
-              flex: 5,
-              child: getMenuFromIndex(),
-            ),
-          ],
+        child: Responsive(
+          mobile: const MobileView(),
+          tablet: getBody(context),
+          desktop: getBody(context),
         ),
       ),
+    );
+  }
+
+  Row getBody(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (Responsive.isDesktop(context))
+          Expanded(
+            child: SideMenu(
+              navigateMenu: (int index) {
+                navigateMenu(index);
+              },
+            ),
+          ),
+        Expanded(
+          flex: 5,
+          child: getMenuFromIndex(),
+        ),
+      ],
     );
   }
 }
