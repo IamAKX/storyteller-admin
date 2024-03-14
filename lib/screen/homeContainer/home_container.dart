@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:story_teller_admin/screen/category/category.dart';
+import 'package:story_teller_admin/screen/author/author_screen.dart';
+import 'package:story_teller_admin/screen/category/category_screen.dart';
 import 'package:story_teller_admin/widget/mobile_view.dart';
 
 import '../../widget/responsive.dart';
@@ -16,7 +17,7 @@ class HomeContainer extends StatefulWidget {
 }
 
 class _HomeContainerState extends State<HomeContainer> {
-  int selectedIndex = 1;
+  int selectedIndex = 2;
 
   navigateMenu(int index) {
     setState(() {
@@ -28,6 +29,8 @@ class _HomeContainerState extends State<HomeContainer> {
     switch (selectedIndex) {
       case 1:
         return CategoryScreen(navigateMenu: navigateMenu);
+      case 2:
+        return AuthorScreen(navigateMenu: navigateMenu);
       default:
         return Container();
     }
@@ -68,6 +71,7 @@ class _HomeContainerState extends State<HomeContainer> {
           flex: 5,
           child: getMenuFromIndex(),
         ),
+        
       ],
     );
   }

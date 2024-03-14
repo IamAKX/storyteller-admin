@@ -8,4 +8,12 @@ class Api {
   static const String createCategory = '$baseUrl/category';
   static const String deleteCategory = '$baseUrl/category/';
   static const String updateCategory = '$baseUrl/category/';
+
+  // Author
+  static const String getAllAuthor = '$baseUrl/author';
+  static const String getAuthorById = '$baseUrl/author/';
+  static const String getAuthorByName = '$baseUrl/author/name/';
+  static const String createAuthor = '$baseUrl/author';
+  static const String deleteAuthor = '$baseUrl/author/';
+  static const String updateAuthor = '$baseUrl/author/';
 }

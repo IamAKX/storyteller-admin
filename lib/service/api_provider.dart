@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:story_teller_admin/model/author_model_list.dart';
 import 'package:story_teller_admin/model/category_model_list.dart';
 
 import '../util/api.dart';
@@ -16,6 +17,12 @@ class ApiProvider extends ChangeNotifier {
   ApiProvider() {
     _dio = Dio();
   }
+
+  /*
+  ****************************************************************
+  * Category APIs
+  *****************************************************************
+  */
 
   Future<CategoryModelList?> getAllCategory() async {
     status = ApiStatus.loading;
@@ -187,4 +194,184 @@ class ApiProvider extends ChangeNotifier {
     notifyListeners();
     return false;
   }
+
+  /*
+  ****************************************************************
+  * Author APIs
+  *****************************************************************
+  */
+
+  Future<AuthorModelList?> getAllAuthor() async {
+    status = ApiStatus.loading;
+    notifyListeners();
+    AuthorModelList? list;
+    try {
+      Response response = await _dio.get(
+        Api.getAllAuthor,
+        options: Options(
+          contentType: 'application/json',
+          responseType: ResponseType.json,
+        ),
+      );
+      if (response.statusCode == 200) {
+        list = AuthorModelList.fromMap(response.data);
+        status = ApiStatus.success;
+        notifyListeners();
+        return list;
+      }
+    } on DioException catch (e) {
+      status = ApiStatus.failed;
+      var resBody = e.response?.data ?? {};
+      log(e.response?.data.toString() ?? e.response.toString());
+      notifyListeners();
+      ToastService.instance.showError('Error : ${resBody['message']}');
+    } catch (e) {
+      status = ApiStatus.failed;
+      notifyListeners();
+      ToastService.instance.showError(e.toString());
+      log(e.toString());
+    }
+    status = ApiStatus.failed;
+    notifyListeners();
+    return list;
+  }
+
+  Future<AuthorModelList?> getAuthorByName(String name) async {
+    status = ApiStatus.loading;
+    notifyListeners();
+    AuthorModelList? list;
+    try {
+      Response response = await _dio.get(
+        '${Api.getAuthorByName}$name',
+        options: Options(
+          contentType: 'application/json',
+          responseType: ResponseType.json,
+        ),
+      );
+      if (response.statusCode == 200) {
+        list = AuthorModelList.fromMap(response.data);
+        status = ApiStatus.success;
+        notifyListeners();
+        return list;
+      }
+    } on DioException catch (e) {
+      status = ApiStatus.failed;
+      var resBody = e.response?.data ?? {};
+      log(e.response?.data.toString() ?? e.response.toString());
+      notifyListeners();
+      ToastService.instance.showError('Error : ${resBody['message']}');
+    } catch (e) {
+      status = ApiStatus.failed;
+      notifyListeners();
+      ToastService.instance.showError(e.toString());
+      log(e.toString());
+    }
+    status = ApiStatus.failed;
+    notifyListeners();
+    return list;
+  }
+
+
+  Future<bool> updateAuthor(int id, Map<String, dynamic> reqBody) async {
+    status = ApiStatus.loading;
+    notifyListeners();
+    try {
+      Response response = await _dio.put(
+        '${Api.updateAuthor}$id',
+        data: reqBody,
+        options: Options(
+          contentType: 'application/json',
+          responseType: ResponseType.json,
+        ),
+      );
+      if (response.statusCode == 200) {
+        status = ApiStatus.success;
+        notifyListeners();
+        return true;
+      }
+    } on DioException catch (e) {
+      status = ApiStatus.failed;
+      var resBody = e.response?.data ?? {};
+      log(e.response?.data.toString() ?? e.response.toString());
+      notifyListeners();
+      ToastService.instance.showError('Error : ${resBody['message']}');
+    } catch (e) {
+      status = ApiStatus.failed;
+      notifyListeners();
+      ToastService.instance.showError(e.toString());
+      log(e.toString());
+    }
+    status = ApiStatus.failed;
+    notifyListeners();
+    return false;
+  }
+
+  Future<bool> createAuthor(Map<String, dynamic> reqBody) async {
+    status = ApiStatus.loading;
+    notifyListeners();
+    try {
+      Response response = await _dio.post(
+        Api.createAuthor,
+        data: reqBody,
+        options: Options(
+          contentType: 'application/json',
+          responseType: ResponseType.json,
+        ),
+      );
+      if (response.statusCode == 200) {
+        status = ApiStatus.success;
+        notifyListeners();
+        return true;
+      }
+    } on DioException catch (e) {
+      status = ApiStatus.failed;
+      var resBody = e.response?.data ?? {};
+      log(e.response?.data.toString() ?? e.response.toString());
+      notifyListeners();
+      ToastService.instance.showError('Error : ${resBody['message']}');
+    } catch (e) {
+      status = ApiStatus.failed;
+      notifyListeners();
+      ToastService.instance.showError(e.toString());
+      log(e.toString());
+    }
+    status = ApiStatus.failed;
+    notifyListeners();
+    return false;
+  }
+
+  Future<bool> deleteAuthor(int id) async {
+    status = ApiStatus.loading;
+    notifyListeners();
+    try {
+      Response response = await _dio.delete(
+        '${Api.deleteAuthor}$id',
+        options: Options(
+          contentType: 'application/json',
+          responseType: ResponseType.json,
+        ),
+      );
+      if (response.statusCode == 200) {
+        status = ApiStatus.success;
+        notifyListeners();
+        return true;
+      }
+    } on DioException catch (e) {
+      status = ApiStatus.failed;
+      var resBody = e.response?.data ?? {};
+      log(e.response?.data.toString() ?? e.response.toString());
+      notifyListeners();
+      ToastService.instance.showError('Error : ${resBody['message']}');
+    } catch (e) {
+      status = ApiStatus.failed;
+      notifyListeners();
+      ToastService.instance.showError(e.toString());
+      log(e.toString());
+    }
+    status = ApiStatus.failed;
+    notifyListeners();
+    return false;
+  }
+
+
 }
