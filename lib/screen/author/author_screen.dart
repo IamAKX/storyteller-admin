@@ -111,124 +111,128 @@ class _AuthorScreenState extends State<AuthorScreen> {
               itemBuilder: (context, index) {
                 AuthorModel? authorModel =
                     authorModelList?.data?.elementAt(index);
-                return Card(
-                  elevation: 5,
-                  color: Colors.white,
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          flex: 7,
-                          child: Stack(
-                            children: [
-                              Container(
-                                child: CachedNetworkImage(
-                                  imageUrl: '${authorModel?.image}',
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) =>
-                                      const CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      const Center(
-                                    child: Text('Image not loaded'),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Column(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {
-                                        AuthorPopup.showEditPopup(
-                                            context, authorModel, reloadScreen);
-                                      },
-                                      icon: const Icon(
-                                        LineAwesomeIcons.edit,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        _api
-                                            .deleteAuthor(authorModel?.id ?? -1)
-                                            .then((value) => reloadScreen());
-                                      },
-                                      icon: const Icon(
-                                        LineAwesomeIcons.trash,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(defaultPadding / 2),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    authorModel?.name ?? '-',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                  ),
-                                ),
-                                verticalGap(defaultPadding / 4),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Tooltip(
-                                    message: TimestampFormatter.dateWithTime(
-                                        authorModel?.createdOn ?? ''),
-                                    child: Text(
-                                      'Created ${TimestampFormatter.timesAgo(authorModel?.createdOn ?? '')}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(),
-                                    ),
-                                  ),
-                                ),
-                                verticalGap(defaultPadding / 4),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Tooltip(
-                                    message: TimestampFormatter.dateWithTime(
-                                        authorModel?.updatedOn ?? ''),
-                                    child: Text(
-                                      'Updated ${TimestampFormatter.timesAgo(authorModel?.updatedOn ?? '')}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return buildAuthorCard(authorModel, context);
               },
             ),
           )
         ],
       ),
     );
+  }
+
+  Card buildAuthorCard(AuthorModel? authorModel, BuildContext context) {
+    return Card(
+                elevation: 5,
+                color: Colors.white,
+                child: Container(
+                  child: Column(
+                    children: [
+                      Expanded(
+                        flex: 7,
+                        child: Stack(
+                          children: [
+                            Container(
+                              child: CachedNetworkImage(
+                                imageUrl: '${authorModel?.image}',
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) =>
+                                    const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    const Center(
+                                  child: Text('Image not loaded'),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: Column(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      AuthorPopup.showEditPopup(
+                                          context, authorModel, reloadScreen);
+                                    },
+                                    icon: const Icon(
+                                      LineAwesomeIcons.edit,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      _api
+                                          .deleteAuthor(authorModel?.id ?? -1)
+                                          .then((value) => reloadScreen());
+                                    },
+                                    icon: const Icon(
+                                      LineAwesomeIcons.trash,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(defaultPadding / 2),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  authorModel?.name ?? '-',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ),
+                              verticalGap(defaultPadding / 4),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Tooltip(
+                                  message: TimestampFormatter.dateWithTime(
+                                      authorModel?.createdOn ?? ''),
+                                  child: Text(
+                                    'Created ${TimestampFormatter.timesAgo(authorModel?.createdOn ?? '')}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(),
+                                  ),
+                                ),
+                              ),
+                              verticalGap(defaultPadding / 4),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Tooltip(
+                                  message: TimestampFormatter.dateWithTime(
+                                      authorModel?.updatedOn ?? ''),
+                                  child: Text(
+                                    'Updated ${TimestampFormatter.timesAgo(authorModel?.updatedOn ?? '')}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.copyWith(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
   }
 }

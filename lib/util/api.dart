@@ -16,4 +16,12 @@ class Api {
   static const String createAuthor = '$baseUrl/author';
   static const String deleteAuthor = '$baseUrl/author/';
   static const String updateAuthor = '$baseUrl/author/';
+
+  // Subscription
+  static const String getAllSubscription = '$baseUrl/subscription';
+  static const String getSubscriptionById = '$baseUrl/subscription/';
+  static const String getSubscriptionByName = '$baseUrl/subscription/name/';
+  static const String createSubscription = '$baseUrl/subscription';
+  static const String deleteSubscription = '$baseUrl/subscription/';
+  static const String updateSubscription = '$baseUrl/subscription/';
 }

@@ -69,7 +69,7 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 SideMenuItem(
                   title: 'Category',
-                  iconData: LineAwesomeIcons.bar_chart_1,
+                  iconData: LineAwesomeIcons.icons,
                   press: () {
                     widget.navigateMenu(1);
                     updateSelectedIndex(1);
@@ -81,7 +81,7 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 SideMenuItem(
                   title: 'Author',
-                  iconData: LineAwesomeIcons.user_1,
+                  iconData: LineAwesomeIcons.user_graduate,
                   press: () {
                     widget.navigateMenu(2);
                     updateSelectedIndex(2);
@@ -92,20 +92,8 @@ class _SideMenuState extends State<SideMenu> {
                   isHighlighted: selectedIndex == 2,
                 ),
                 SideMenuItem(
-                  title: 'Dealer',
-                  iconData: LineAwesomeIcons.user_tie,
-                  press: () {
-                    widget.navigateMenu(3);
-                    updateSelectedIndex(3);
-                    if (Scaffold.of(context).isDrawerOpen) {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  isHighlighted: selectedIndex == 3,
-                ),
-                SideMenuItem(
-                  title: 'Subscription',
-                  iconData: LineAwesomeIcons.users_cog,
+                  title: 'Packages',
+                  iconData: LineAwesomeIcons.star,
                   press: () {
                     widget.navigateMenu(4);
                     updateSelectedIndex(4);
@@ -117,7 +105,7 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 SideMenuItem(
                   title: 'Story',
-                  iconData: LineAwesomeIcons.poll_h,
+                  iconData: LineAwesomeIcons.book_open,
                   press: () {
                     widget.navigateMenu(5);
                     updateSelectedIndex(5);
@@ -129,7 +117,7 @@ class _SideMenuState extends State<SideMenu> {
                 ),
                 SideMenuItem(
                   title: 'User Base',
-                  iconData: LineAwesomeIcons.file_invoice,
+                  iconData: LineAwesomeIcons.users,
                   press: () {
                     widget.navigateMenu(6);
                     updateSelectedIndex(6);
