@@ -12,7 +12,7 @@ class HomeContainer extends StatefulWidget {
   const HomeContainer({super.key});
   static const String routePath = '/homeContainer';
   static dynamic args;
-  static int selectedIndex = 5;
+  static int selectedIndex = 1;
   static GlobalKey<ScaffoldState> scafoldKey = GlobalKey<ScaffoldState>();
 
   @override
