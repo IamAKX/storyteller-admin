@@ -7,7 +7,7 @@ class InputFieldLight extends StatelessWidget {
       required this.controller,
       required this.keyboardType,
       required this.obscure,
-      required this.icon,
+      this.icon,
       this.enabled,
       this.onChange})
       : super(key: key);
@@ -16,7 +16,7 @@ class InputFieldLight extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final bool obscure;
-  final IconData icon;
+  final IconData? icon;
 
   final bool? enabled;
   final Function(String)? onChange;

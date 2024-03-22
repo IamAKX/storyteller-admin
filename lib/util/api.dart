@@ -1,5 +1,5 @@
 class Api {
-  static const String baseUrl = 'http://3.109.185.125:80';
+  static const String baseUrl = 'https://3.109.185.125:8081';
 
   // Category
   static const String getAllCategory = '$baseUrl/category';
@@ -24,4 +24,18 @@ class Api {
   static const String createSubscription = '$baseUrl/subscription';
   static const String deleteSubscription = '$baseUrl/subscription/';
   static const String updateSubscription = '$baseUrl/subscription/';
+
+  // Story
+  static const String getAllStory = '$baseUrl/story';
+  static const String getStoryById = '$baseUrl/story/';
+  static const String getStoryByName = '$baseUrl/story/name/';
+  static const String createStory = '$baseUrl/story';
+  static const String deleteStory = '$baseUrl/story/';
+  static const String updateStory = '$baseUrl/story/';
+
+  // Story Chat
+  static const String getStoryChatByStoryId = '$baseUrl/storychat/story/';
+  static const String createChatStory = '$baseUrl/storychat';
+  static const String updateChatStory = '$baseUrl/storychat/';
+  static const String deleteChatStory = '$baseUrl/storychat/';
 }

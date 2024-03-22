@@ -7,7 +7,7 @@ class InputFieldRound extends StatelessWidget {
       required this.controller,
       required this.keyboardType,
       required this.obscure,
-      required this.icon,
+      this.icon,
       this.enabled,
       this.onChange})
       : super(key: key);
@@ -16,7 +16,7 @@ class InputFieldRound extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final bool obscure;
-  final IconData icon;
+  final IconData? icon;
 
   final bool? enabled;
   final Function(String)? onChange;
@@ -39,10 +39,12 @@ class InputFieldRound extends StatelessWidget {
           filled: false,
           contentPadding: const EdgeInsets.all(0),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
-          prefixIcon: Icon(
-            icon,
-            size: 15,
-          ),
+          prefixIcon: icon == null
+              ? null
+              : Icon(
+                  icon,
+                  size: 15,
+                ),
         ),
         onChanged: onChange,
       ),

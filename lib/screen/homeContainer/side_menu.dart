@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:story_teller_admin/screen/homeContainer/home_container.dart';
 
 import '../../util/colors.dart';
 import '../../util/theme.dart';
@@ -16,11 +17,10 @@ class SideMenu extends StatefulWidget {
 }
 
 class _SideMenuState extends State<SideMenu> {
-  int selectedIndex = 1;
 
   updateSelectedIndex(int index) {
     setState(() {
-      selectedIndex = index;
+      HomeContainer.selectedIndex = index;
     });
   }
 
@@ -77,7 +77,7 @@ class _SideMenuState extends State<SideMenu> {
                       Navigator.of(context).pop();
                     }
                   },
-                  isHighlighted: selectedIndex == 1,
+                  isHighlighted: HomeContainer.selectedIndex == 1,
                 ),
                 SideMenuItem(
                   title: 'Author',
@@ -89,7 +89,7 @@ class _SideMenuState extends State<SideMenu> {
                       Navigator.of(context).pop();
                     }
                   },
-                  isHighlighted: selectedIndex == 2,
+                  isHighlighted: HomeContainer.selectedIndex == 2,
                 ),
                 SideMenuItem(
                   title: 'Packages',
@@ -101,7 +101,7 @@ class _SideMenuState extends State<SideMenu> {
                       Navigator.of(context).pop();
                     }
                   },
-                  isHighlighted: selectedIndex == 4,
+                  isHighlighted: HomeContainer.selectedIndex == 4,
                 ),
                 SideMenuItem(
                   title: 'Story',
@@ -113,7 +113,7 @@ class _SideMenuState extends State<SideMenu> {
                       Navigator.of(context).pop();
                     }
                   },
-                  isHighlighted: selectedIndex == 5,
+                  isHighlighted: HomeContainer.selectedIndex == 5,
                 ),
                 SideMenuItem(
                   title: 'User Base',
@@ -125,7 +125,7 @@ class _SideMenuState extends State<SideMenu> {
                       Navigator.of(context).pop();
                     }
                   },
-                  isHighlighted: selectedIndex == 6,
+                  isHighlighted: HomeContainer.selectedIndex == 6,
                 )
               ],
             ),

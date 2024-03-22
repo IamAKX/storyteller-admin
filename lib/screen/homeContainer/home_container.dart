@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:story_teller_admin/screen/author/author_screen.dart';
 import 'package:story_teller_admin/screen/category/category_screen.dart';
+import 'package:story_teller_admin/screen/story/story_screen.dart';
 import 'package:story_teller_admin/screen/subscription/subscription_screen.dart';
 import 'package:story_teller_admin/widget/mobile_view.dart';
 
@@ -11,6 +12,7 @@ class HomeContainer extends StatefulWidget {
   const HomeContainer({super.key});
   static const String routePath = '/homeContainer';
   static dynamic args;
+  static int selectedIndex = 5;
   static GlobalKey<ScaffoldState> scafoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -18,22 +20,22 @@ class HomeContainer extends StatefulWidget {
 }
 
 class _HomeContainerState extends State<HomeContainer> {
-  int selectedIndex = 4;
-
   navigateMenu(int index) {
     setState(() {
-      selectedIndex = index;
+      HomeContainer.selectedIndex = index;
     });
   }
 
   Widget getMenuFromIndex() {
-    switch (selectedIndex) {
+    switch (HomeContainer.selectedIndex) {
       case 1:
         return CategoryScreen(navigateMenu: navigateMenu);
       case 2:
         return AuthorScreen(navigateMenu: navigateMenu);
       case 4:
         return SubscriptionScreen(navigateMenu: navigateMenu);
+      case 5:
+        return StoryScreen(navigateMenu: navigateMenu);
       default:
         return Container();
     }
