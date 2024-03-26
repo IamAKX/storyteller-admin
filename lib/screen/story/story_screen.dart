@@ -17,6 +17,7 @@ import 'package:story_teller_admin/model/story_model_list.dart';
 import 'package:story_teller_admin/util/colors.dart';
 
 import '../../service/api_provider.dart';
+import '../../service/storage_provider.dart';
 import '../../service/toast_service.dart';
 import '../../util/theme.dart';
 import '../../widget/gaps.dart';
@@ -230,18 +231,29 @@ class _StoryScreenState extends State<StoryScreen> {
                                   ? Colors.blue
                                   : Colors.white,
                               child: Container(
-                                constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.7,
+                                constraints: const BoxConstraints(
+                                  maxWidth: 200,
+                                  //MediaQuery.of(context).size.width * 0.7,
                                 ),
-                                child: Text(
-                                  chat.text ?? '',
-                                  style: TextStyle(
-                                    color: chat.sender == 'ME'
-                                        ? Colors.white
-                                        : textColorDark,
-                                  ),
-                                ),
+                                child: chat.messageType == 'TEXT'
+                                    ? Text(
+                                        chat.text ?? '',
+                                        style: TextStyle(
+                                          color: chat.sender == 'ME'
+                                              ? Colors.white
+                                              : textColorDark,
+                                        ),
+                                      )
+                                    : CachedNetworkImage(
+                                        imageUrl: '${chat.mediaUrl}',
+                                        fit: BoxFit.fitWidth,
+                                        placeholder: (context, url) =>
+                                            const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) =>
+                                            const Center(
+                                          child: Text('Image not loaded'),
+                                        ),
+                                      ),
                               ),
                             ),
                           );
@@ -330,7 +342,32 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                   horizontalGap(10),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      Uint8List? fromPicker;
+                      fromPicker = await ImagePickerWeb.getImageAsBytes();
+                      if (fromPicker == null) {
+                        ToastService.instance.showError('Select image');
+                        return;
+                      }
+                      Map<String, dynamic> reqBody = {
+                        'story': {'id': selectedStory},
+                        'text': '',
+                        'mediaUrl': await StorageProvider.instance.uploadFile(
+                            'story',
+                            DateTime.now().toIso8601String(),
+                            fromPicker!),
+                        'messageType': 'IMAGE',
+                        'reactionType': '',
+                        'reactionEnabled': false,
+                        'sender': selectedItem,
+                        'chatTimestamp': ''
+                      };
+                      _api.createStoryChat(reqBody).then((value) async {
+                        messageCtrl.text = '';
+                        await loadStoryChatByStoryId(selectedStory);
+                        scrollToBottom();
+                      });
+                    },
                     icon: const Icon(
                       Icons.image,
                       color: primaryColor,
@@ -354,8 +391,7 @@ class _StoryScreenState extends State<StoryScreen> {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      'https://miro.medium.com/v2/resize:fit:1080/1*jWx9suY2k3Ifq4B8A_vz9g.jpeg', //'${model?.image}',
+                  imageUrl: '${model?.image}',
                   fit: BoxFit.cover,
                   width: 50,
                   height: 50,
