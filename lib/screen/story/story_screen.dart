@@ -38,7 +38,7 @@ class _StoryScreenState extends State<StoryScreen> {
   final TextEditingController search = TextEditingController();
   late ApiProvider _api;
   StoryModelList? storyModelList;
-  int selectedStory = -1;
+  StoryModel? selectedStory;
   List<StoryChatModel> storyChatList = [];
   CategoryModelList? categoryModelList;
   AuthorModelList? authorModelList;
@@ -95,28 +95,26 @@ class _StoryScreenState extends State<StoryScreen> {
     });
   }
 
-  loadStoryChatByStoryId(int id) async {
-    selectedStory = id;
-
-    _api.getStoryChatByStoryId(id).then((value) {
+  loadStoryChatByStoryId() async {
+    _api.getStoryChatByStoryId(selectedStory?.id ?? -1).then((value) {
       storyChatList = value?.data ?? [];
       setState(() {});
       scrollToBottom();
     });
   }
 
-  loadStoryChatByStoryIdWithoutScroll(int id) async {
-    selectedStory = id;
-    _api.getStoryChatByStoryId(id).then((value) {
+  loadStoryChatByStoryIdWithoutScroll() async {
+    _api.getStoryChatByStoryId(selectedStory?.id ?? -1).then((value) {
       storyChatList = value?.data ?? [];
       setState(() {});
     });
   }
 
   deleteChatStory(int id, int storyId) {
+    selectedStory = null;
     _api
         .deleteStoryChat(id)
-        .then((value) => loadStoryChatByStoryIdWithoutScroll(storyId));
+        .then((value) => loadStoryChatByStoryIdWithoutScroll());
   }
 
   @override
@@ -231,29 +229,52 @@ class _StoryScreenState extends State<StoryScreen> {
                                   ? Colors.blue
                                   : Colors.white,
                               child: Container(
-                                constraints: const BoxConstraints(
-                                  maxWidth: 200,
-                                  //MediaQuery.of(context).size.width * 0.7,
+                                constraints: BoxConstraints(
+                                  // maxWidth: 200,
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.2,
                                 ),
-                                child: chat.messageType == 'TEXT'
-                                    ? Text(
-                                        chat.text ?? '',
-                                        style: TextStyle(
-                                          color: chat.sender == 'ME'
-                                              ? Colors.white
-                                              : textColorDark,
-                                        ),
-                                      )
-                                    : CachedNetworkImage(
-                                        imageUrl: '${chat.mediaUrl}',
-                                        fit: BoxFit.fitWidth,
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            const Center(
-                                          child: Text('Image not loaded'),
-                                        ),
+                                child: Column(
+                                  crossAxisAlignment: chat.sender == 'ME'
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      chat.sender == 'ME'
+                                          ? selectedStory?.userMe ?? ''
+                                          : selectedStory?.userOther ?? '',
+                                      style: TextStyle(
+                                        color: chat.sender == 'ME'
+                                            ? Colors.black
+                                            : Colors.grey,
+                                        fontSize: 12,
                                       ),
+                                    ),
+                                    chat.messageType == 'TEXT'
+                                        ? Text(
+                                            chat.text?.trim() ?? '',
+                                            style: TextStyle(
+                                              color: chat.sender == 'ME'
+                                                  ? Colors.white
+                                                  : textColorDark,
+                                            ),
+                                            textAlign: chat.sender == 'ME'
+                                                ? TextAlign.right
+                                                : TextAlign.left,
+                                          )
+                                        : CachedNetworkImage(
+                                            imageUrl: '${chat.mediaUrl}',
+                                            fit: BoxFit.fitWidth,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Center(
+                                              child: Text('Image not loaded'),
+                                            ),
+                                          ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -289,7 +310,7 @@ class _StoryScreenState extends State<StoryScreen> {
                         if (messageCtrl.text.isEmpty) return;
                         // createChat
                         Map<String, dynamic> reqBody = {
-                          'story': {'id': selectedStory},
+                          'story': {'id': selectedStory?.id},
                           'text': messageCtrl.text,
                           'mediaUrl': '',
                           'messageType': 'TEXT',
@@ -300,7 +321,7 @@ class _StoryScreenState extends State<StoryScreen> {
                         };
                         _api.createStoryChat(reqBody).then((value) async {
                           messageCtrl.text = '';
-                          await loadStoryChatByStoryId(selectedStory);
+                          await loadStoryChatByStoryId();
                           scrollToBottom();
                         });
                       },
@@ -317,7 +338,7 @@ class _StoryScreenState extends State<StoryScreen> {
                             if (messageCtrl.text.isEmpty) return;
                             // createChat
                             Map<String, dynamic> reqBody = {
-                              'story': {'id': selectedStory},
+                              'story': {'id': selectedStory?.id},
                               'text': messageCtrl.text,
                               'mediaUrl': '',
                               'messageType': 'TEXT',
@@ -328,7 +349,7 @@ class _StoryScreenState extends State<StoryScreen> {
                             };
                             _api.createStoryChat(reqBody).then((value) async {
                               messageCtrl.text = '';
-                              await loadStoryChatByStoryId(selectedStory);
+                              await loadStoryChatByStoryId();
                               scrollToBottom();
                             });
                           },
@@ -350,7 +371,7 @@ class _StoryScreenState extends State<StoryScreen> {
                         return;
                       }
                       Map<String, dynamic> reqBody = {
-                        'story': {'id': selectedStory},
+                        'story': {'id': selectedStory?.id},
                         'text': '',
                         'mediaUrl': await StorageProvider.instance.uploadFile(
                             'story',
@@ -364,7 +385,7 @@ class _StoryScreenState extends State<StoryScreen> {
                       };
                       _api.createStoryChat(reqBody).then((value) async {
                         messageCtrl.text = '';
-                        await loadStoryChatByStoryId(selectedStory);
+                        await loadStoryChatByStoryId();
                         scrollToBottom();
                       });
                     },
@@ -439,7 +460,8 @@ class _StoryScreenState extends State<StoryScreen> {
                 ],
               ),
               onTap: () async {
-                loadStoryChatByStoryId(model?.id ?? -1);
+                selectedStory = model;
+                loadStoryChatByStoryId();
                 await scrollToBottom();
               },
             );

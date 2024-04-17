@@ -21,7 +21,7 @@ class StoryPopup {
   static List<String> items = ['ME', 'OTHER'];
 
   static showEditChatPopup(BuildContext context, StoryChatModel? chatModel,
-      Function(int) reloadChat, Function(int, int) deleteChat) {
+      Function() reloadChat, Function(int, int) deleteChat) {
     TextEditingController textCtrl =
         TextEditingController(text: chatModel?.text ?? '');
     String selectedItem = chatModel?.sender ?? 'ME';
@@ -135,7 +135,7 @@ class StoryPopup {
                   ApiProvider.instance
                       .updateStoryChat(chatModel?.id ?? -1, reqBody)
                       .then((value) {
-                    reloadChat(chatModel?.story?.id ?? -1);
+                    reloadChat();
                   });
                   Navigator.pop(context);
                 },
@@ -186,6 +186,8 @@ class StoryPopup {
     Uint8List? fromPicker;
     TextEditingController nameCtrl = TextEditingController();
     TextEditingController tagCtrl = TextEditingController();
+    TextEditingController userMeCtrl = TextEditingController();
+    TextEditingController userOtherCtrl = TextEditingController();
     showDialog(
       context: context,
       builder: (context) {
@@ -240,6 +242,20 @@ class StoryPopup {
                       obscure: false,
                       icon: LineAwesomeIcons.icons),
                   verticalGap(defaultPadding / 2),
+                  InputFieldRound(
+                      hint: 'Right side user name',
+                      controller: userMeCtrl,
+                      keyboardType: TextInputType.name,
+                      obscure: false,
+                      icon: LineAwesomeIcons.user),
+                  verticalGap(defaultPadding / 2),
+                  InputFieldRound(
+                      hint: 'Left side user name',
+                      controller: userOtherCtrl,
+                      keyboardType: TextInputType.name,
+                      obscure: false,
+                      icon: LineAwesomeIcons.user_1),
+                  verticalGap(defaultPadding / 2),
                   DropdownButtonHideUnderline(
                     child: DropdownButton<AuthorModel>(
                       hint: const Text('Select Author'),
@@ -282,9 +298,11 @@ class StoryPopup {
                   if (nameCtrl.text.isEmpty ||
                       categoryModel == null ||
                       authorModel == null ||
-                      fromPicker == null) {
-                    ToastService.instance
-                        .showError('Name, Category, Author or Image is empty');
+                      fromPicker == null ||
+                      userMeCtrl.text.isEmpty ||
+                      userOtherCtrl.text.isEmpty) {
+                    ToastService.instance.showError(
+                        'Name, Category, Left user name, Right user name, Author or Image is empty');
                     return;
                   }
                   Map<String, dynamic> reqBody = {
@@ -293,7 +311,9 @@ class StoryPopup {
                     "name": nameCtrl.text,
                     "image": await StorageProvider.instance.uploadFile(
                         'story', DateTime.now().toIso8601String(), fromPicker!),
-                    "tags": tagCtrl.text
+                    "tags": tagCtrl.text,
+                    "userMe": userMeCtrl.text,
+                    "userOther": userOtherCtrl.text
                   };
 
                   ApiProvider.instance.createStory(reqBody).then((value) {
